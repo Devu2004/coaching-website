@@ -1,0 +1,73 @@
+@use '../../styles/variables' as v;
+@use '../../styles/mixins' as m;
+
+.marquee {
+  background-color: v.$color-bg-dark; // Dark background for contrast
+  color: v.$color-text-dark;
+  padding: 3rem 0;
+  overflow: hidden; // Critical to prevent horizontal scrollbars on mobile
+  display: flex;
+  white-space: nowrap;
+  position: relative;
+  z-index: 10;
+  
+  // Tighter padding on extreme 200px mobile
+  @media (max-width: v.$bp-sm) {
+    padding: 1.5rem 0;
+  }
+
+  &__inner {
+    display: flex;
+    width: fit-content;
+    animation: marquee-scroll 20s linear infinite;
+
+    // Hover to pause the marquee (optional, nice UX touch)
+    &:hover {
+      animation-play-state: paused;
+    }
+  }
+
+  &__part {
+    display: flex;
+    align-items: center;
+    flex-shrink: 0;
+    padding: 0 1rem;
+    font-family: v.$font-secondary;
+    // Massive fluid font size
+    font-size: clamp(3rem, 8vw, 7rem);
+    font-weight: 500;
+    text-transform: uppercase;
+    line-height: 1;
+
+    // Awwwards trick: Alternate between solid and outlined text
+    // We apply the stroke to specific words if we wrap them in spans, 
+    // or to the whole block if desired. Let's make the whole block slightly transparent, 
+    // but keep it sharp.
+    // color: transparent;
+    // -webkit-text-stroke: 1px rgba(255, 255, 255, 0.4);
+    transition: all 0.3s ease;
+
+    &:hover {
+      -webkit-text-stroke: 1px v.$color-bg-light;
+      color: v.$color-bg-light;
+    }
+
+    .dot {
+      color: v.$color-accent;
+      -webkit-text-stroke: 0px; // Remove stroke from the dot
+      margin: 0 2vw; // Fluid spacing between phrases
+      font-size: 0.5em; // Make dot slightly smaller than text
+    }
+  }
+}
+
+// The infinite scrolling engine
+@keyframes marquee-scroll {
+  0% {
+    transform: translate3d(0, 0, 0);
+  }
+  100% {
+    // Shifts exactly 50% of the inner container (which is 1 full part)
+    transform: translate3d(-50%, 0, 0);
+  }
+}

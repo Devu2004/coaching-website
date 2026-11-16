@@ -1,0 +1,67 @@
+// src/styles/mixins.scss
+@use 'variables' as v;
+
+// Mobile-first Media Queries
+@mixin respond-to($breakpoint) {
+  @if $breakpoint == xs {
+    @media (min-width: v.$bp-xs) { @content; }
+  }
+  @if $breakpoint == sm {
+    @media (min-width: v.$bp-sm) { @content; }
+  }
+  @if $breakpoint == md {
+    @media (min-width: v.$bp-md) { @content; }
+  }
+  @if $breakpoint == lg {
+    @media (min-width: v.$bp-lg) { @content; }
+  }
+  @if $breakpoint == xl {
+    @media (min-width: v.$bp-xl) { @content; }
+  }
+  @if $breakpoint == xxl {
+    @media (min-width: v.$bp-xxl) { @content; }
+  }
+}
+
+// Fluid Typography Mixin (Clamp generator)
+@mixin fluid-text($min-size, $max-size) {
+  font-size: clamp(
+    #{$min-size}rem,
+    calc(#{$min-size}rem + (#{$max-size} - #{$min-size}) * ((100vw - 20rem) / (90 - 20))),
+    #{$max-size}rem
+  );
+}
+
+// Layout Helpers
+@mixin flex-center {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+@mixin flex-between {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+// Awwwards Style Container (Maintains constraints on ultra-wide)
+@mixin container {
+  width: 100%;
+  max-width: 1920px; // Cap at XXL
+  margin: 0 auto;
+  padding: 0 5vw; // Fluid padding on edges
+  
+  @include respond-to(md) {
+    padding: 0 2rem;
+  }
+}
+
+// Hide Scrollbar for sleek UI elements
+@mixin hide-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}

@@ -1,0 +1,174 @@
+@use '../../styles/variables' as v;
+@use '../../styles/mixins' as m;
+
+.navbar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: 100;
+  background: rgba(255, 255, 255, 0.7);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+
+  &__container {
+    @include m.container;
+    @include m.flex-between;
+    height: 70px;
+    
+    // Scale down height for extreme small screens (200px range)
+    @media (max-width: v.$bp-sm) {
+      height: 60px;
+    }
+  }
+
+  &__logo {
+    font-family: v.$font-secondary;
+    font-size: clamp(1.2rem, 5vw, 1.75rem);
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    z-index: 101; // Keep above mobile menu
+    
+    span {
+      color: v.$color-accent;
+    }
+  }
+
+  // Desktop Links
+  &__desktop {
+    display: none;
+    align-items: center;
+    gap: 2.5rem;
+
+    @include m.respond-to(md) {
+      display: flex;
+    }
+  }
+
+  &__link {
+    font-size: 0.95rem;
+    font-weight: 500;
+    position: relative;
+    padding: 0.5rem 0;
+    transition: color 0.3s ease;
+
+    &::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 0%;
+      height: 1px;
+      background-color: v.$color-text-light;
+      transition: width 0.3s cubic-bezier(0.76, 0, 0.24, 1);
+    }
+
+    &:hover::after {
+      width: 100%;
+    }
+  }
+
+  &__cta {
+    background: v.$color-text-light;
+    color: v.$color-bg-light;
+    border: none;
+    padding: 0.75rem 1.5rem;
+    border-radius: 50px;
+    font-weight: 600;
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: transform 0.3s ease, background 0.3s ease;
+
+    &:hover {
+      background: v.$color-accent;
+      transform: translateY(-2px);
+    }
+  }
+
+  // Mobile Toggle Button
+  &__toggle {
+    display: block;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    z-index: 101; // Keep above mobile menu
+
+    @include m.respond-to(md) {
+      display: none;
+    }
+
+    .hamburger {
+      width: 24px;
+      height: 16px;
+      position: relative;
+      @include m.flex-center;
+      flex-direction: column;
+      justify-content: space-between;
+
+      span {
+        display: block;
+        width: 100%;
+        height: 2px;
+        background-color: v.$color-text-light;
+        transition: all 0.4s cubic-bezier(0.76, 0, 0.24, 1);
+        transform-origin: left center;
+      }
+
+      &.active {
+        span:nth-child(1) {
+          transform: rotate(45deg);
+        }
+        span:nth-child(2) {
+          transform: rotate(-45deg);
+        }
+      }
+    }
+  }
+
+  // Mobile Menu Layout
+  &__mobile-menu {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    width: 100%;
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+    padding: 2rem v.$space-sm;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+
+    @include m.respond-to(md) {
+      display: none;
+    }
+  }
+
+  &__mobile-links {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    align-items: center;
+  }
+
+  &__mobile-link {
+    font-family: v.$font-secondary;
+    font-size: 2rem;
+    font-weight: 500;
+    letter-spacing: -0.02em;
+    color: v.$color-text-light;
+  }
+
+  &__mobile-cta {
+    margin-top: 1rem;
+    width: 100%;
+    max-width: 250px;
+    background: v.$color-text-light;
+    color: v.$color-bg-light;
+    border: none;
+    padding: 1rem;
+    border-radius: 50px;
+    font-size: 1.1rem;
+    font-weight: 600;
+  }
+}

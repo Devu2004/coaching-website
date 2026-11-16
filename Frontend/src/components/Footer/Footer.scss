@@ -1,0 +1,186 @@
+@use '../../styles/variables' as v;
+@use '../../styles/mixins' as m;
+
+.footer {
+  position: relative;
+  width: 100%;
+  background-color: v.$color-bg-dark; // Heavy dark anchor
+  color: v.$color-text-dark;
+  padding-top: 5rem;
+  overflow: hidden;
+  z-index: 10;
+
+  @include m.respond-to(md) {
+    padding-top: 8rem;
+  }
+
+  &__container {
+    @include m.container;
+    display: flex;
+    flex-direction: column;
+  }
+
+  // --- TOP: LINKS GRID ---
+  &__top {
+    display: grid;
+    grid-template-columns: 1fr; // Vertical stack on mobile
+    gap: 3rem;
+    margin-bottom: 4rem;
+
+    @include m.respond-to(md) {
+      grid-template-columns: repeat(2, 1fr); // 2 Cols on tablet
+      gap: 4rem;
+    }
+
+    @include m.respond-to(lg) {
+      grid-template-columns: 2fr 1fr 1fr 1fr; // Custom split on desktop
+      gap: 3rem;
+    }
+  }
+
+  &__col {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+
+    &.brand-col {
+      @include m.respond-to(lg) {
+        padding-right: 4rem; // Give the description breathing room
+      }
+    }
+  }
+
+  &__brand {
+    font-family: v.$font-secondary;
+    font-size: clamp(2rem, 4vw, 2.5rem);
+    font-weight: 700;
+    line-height: 1;
+
+    span {
+      color: v.$color-accent;
+    }
+  }
+
+  &__desc {
+    font-size: clamp(0.9rem, 1vw, 1rem);
+    color: rgba(255, 255, 255, 0.6);
+    line-height: 1.6;
+  }
+
+  &__col-title {
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: rgba(255, 255, 255, 0.4);
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+  }
+
+  &__list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.8rem;
+
+    li a {
+      font-size: clamp(0.9rem, 1.2vw, 1rem);
+      font-weight: 500;
+      color: v.$color-text-dark;
+      transition: color 0.3s ease, padding-left 0.3s cubic-bezier(0.76, 0, 0.24, 1);
+      position: relative;
+
+      &:hover {
+        color: v.$color-accent;
+        padding-left: 5px; // Slick agency hover effect
+      }
+    }
+  }
+
+  // --- MIDDLE: MASSIVE TYPOGRAPHY ---
+  &__middle {
+    width: 100%;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    padding: 2rem 0;
+    overflow: hidden; // Hides the text before it sweeps up
+    display: flex;
+    justify-content: center;
+  }
+
+  &__massive-text {
+    font-family: v.$font-secondary;
+    // Scales dynamically to perfectly fit edge-to-edge
+    font-size: clamp(3.5rem, 16vw, 18rem);
+    font-weight: 500;
+    line-height: 0.8;
+    letter-spacing: -0.02em;
+    color: v.$color-bg-light;
+    margin: 0;
+
+    span {
+      display: inline-block;
+      will-change: transform; // GPU acceleration for the sweep up
+    }
+  }
+
+  // --- BOTTOM: COPYRIGHT & LEGAL ---
+  &__bottom {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    padding: 2rem 0;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    
+    @include m.respond-to(md) {
+      flex-direction: row;
+      justify-content: space-between;
+      align-items: center;
+      gap: 0;
+    }
+  }
+
+  &__copyright {
+    font-size: clamp(0.75rem, 1vw, 0.85rem);
+    color: rgba(255, 255, 255, 0.5);
+  }
+
+  &__legal {
+    display: flex;
+    gap: 1.5rem;
+    
+    a {
+      font-size: clamp(0.75rem, 1vw, 0.85rem);
+      color: rgba(255, 255, 255, 0.5);
+      transition: color 0.3s ease;
+
+      &:hover {
+        color: v.$color-bg-light;
+      }
+    }
+  }
+
+  &__back-to-top {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: transparent;
+    border: none;
+    color: v.$color-bg-light;
+    cursor: pointer;
+    font-family: v.$font-primary;
+    font-size: 0.85rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    padding: 0;
+
+    svg {
+      width: 18px;
+      height: 18px;
+      transition: transform 0.3s cubic-bezier(0.76, 0, 0.24, 1);
+    }
+
+    &:hover svg {
+      transform: translateY(-4px); // Bounces the arrow up
+      color: v.$color-accent;
+    }
+  }
+}

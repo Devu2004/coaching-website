@@ -1,0 +1,91 @@
+// src/styles/main.scss
+@use 'variables' as v;
+@use 'mixins' as m;
+
+// 1. CSS Reset & Box Sizing
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+// 2. Base HTML/Body Setup
+html {
+  font-size: 16px; // Base for rems
+  scroll-behavior: initial; // Lenis needs this to be initial, NOT smooth
+  
+  @include m.respond-to(xxl) {
+    font-size: 18px; // Scale up for massive screens
+  }
+}
+
+body {
+  font-family: v.$font-primary;
+  background-color: v.$color-bg-light;
+  color: v.$color-text-light;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  overflow-x: hidden; // Prevent horizontal scroll on mobile
+  min-height: 100vh;
+  min-width: 200px; // Your strict minimum requirement
+}
+
+// 3. Lenis Smooth Scroll Mandatory Styles
+// (Prevents jitter and scrolling bugs)
+html.lenis, html.lenis body {
+  height: auto;
+}
+
+.lenis.lenis-smooth {
+  scroll-behavior: auto !important;
+}
+
+.lenis.lenis-smooth [data-lenis-prevent] {
+  overscroll-behavior: contain;
+}
+
+.lenis.lenis-stopped {
+  overflow: hidden;
+}
+
+.lenis.lenis-smooth iframe {
+  pointer-events: none;
+}
+
+// 4. Global Typography Utilities
+h1, h2, h3, h4, h5, h6 {
+  font-family: v.$font-secondary;
+  font-weight: 500;
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+}
+
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
+ul, ol {
+  list-style: none;
+}
+
+img, video {
+  max-width: 100%;
+  height: auto;
+  display: block;
+}
+
+// 5. Utility Classes for rapid scaffolding
+.container {
+  @include m.container;
+}
+
+.text-fluid-h1 {
+  @include m.fluid-text(2.5, 7); // Scales from 2.5rem to 7rem
+}
+
+.text-fluid-h2 {
+  @include m.fluid-text(2, 5);
+}

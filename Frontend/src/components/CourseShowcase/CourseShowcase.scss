@@ -1,0 +1,245 @@
+@use '../../styles/variables' as v;
+@use '../../styles/mixins' as m;
+
+.courses {
+  position: relative;
+  width: 100%;
+  padding: 5rem 0;
+  background-color: v.$color-bg-light;
+  color: v.$color-text-light;
+  overflow: hidden;
+
+  @include m.respond-to(md) {
+    padding: 8rem 0;
+  }
+
+  &__container {
+    @include m.container;
+    display: flex;
+    flex-direction: column;
+    gap: 3rem;
+
+    @include m.respond-to(lg) {
+      gap: 5rem;
+    }
+  }
+
+  // --- HEADER ---
+  &__header {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    max-width: 700px;
+  }
+
+  &__title {
+    font-family: v.$font-secondary;
+    font-size: clamp(2.5rem, 6vw, 5rem);
+    line-height: 1;
+    text-transform: uppercase;
+    font-weight: 500;
+
+    .accent {
+      color: v.$color-accent;
+      font-style: italic;
+    }
+  }
+
+  &__subtitle {
+    font-size: clamp(0.9rem, 1.5vw, 1.2rem);
+    color: v.$color-gray-800;
+    line-height: 1.6;
+  }
+
+  // --- ONE-ROW LAYOUT (Mobile Slider -> Desktop 4-Col Grid) ---
+  &__grid {
+    display: flex;
+    gap: 1.25rem;
+    overflow-x: auto;
+    overflow-y: hidden;
+    scroll-snap-type: x mandatory;
+    padding-bottom: 2rem; 
+    align-items: stretch; // CRITICAL: Forces all cards in the row to be equal height
+    
+    // Hardware acceleration for zero lag on mobile swiping
+    -webkit-overflow-scrolling: touch; 
+    transform: translateZ(0); 
+    
+    @include m.hide-scrollbar; 
+
+    @include m.respond-to(md) {
+      gap: 2rem;
+    }
+
+    // On large screens, lock it into a 4-column grid
+    @include m.respond-to(lg) {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      overflow-x: visible; 
+      padding-bottom: 0;
+      align-items: stretch; // Maintains equal height in grid mode
+    }
+  }
+
+  // --- COURSE CARDS ---
+  .course-card {
+    // Mobile: Take up 85vw to peek the next card. 
+    flex: 0 0 85vw;
+    scroll-snap-align: start;
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+    background: rgba(0, 0, 0, 0.04); // Clean, performant background
+    padding: 1rem;
+    border-radius: 16px;
+    cursor: pointer;
+    
+    // Prevent lag by giving the browser layout hints
+    will-change: transform;
+    transform: translateZ(0);
+    
+    // Extreme 200px mobile handling
+    @media (max-width: v.$bp-sm) {
+      flex: 0 0 90vw;
+    }
+
+    // Tablet: Show roughly 2 cards at a time
+    @include m.respond-to(md) {
+      flex: 0 0 45vw;
+    }
+
+    // Desktop: Reset flex because CSS Grid takes over
+    @include m.respond-to(lg) {
+      flex: auto;
+      background: transparent; // Clean look on desktop
+      padding: 0;
+    }
+
+    // Card Hover Animations
+    &:hover {
+      .course-card__image {
+        transform: scale(1.05);
+      }
+      
+      .course-card__explore {
+        color: v.$color-accent;
+        
+        svg {
+          transform: translateX(5px);
+          stroke: v.$color-accent;
+        }
+      }
+    }
+
+    &__image-wrapper {
+      width: 100%;
+      aspect-ratio: 1 / 1; // Perfect square ensures stability on tiny screens
+      border-radius: 12px;
+      overflow: hidden;
+      position: relative;
+      background-color: v.$color-gray-100;
+      flex-shrink: 0; // Prevents the image from being squished if text is long
+    }
+
+    &__image {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.6s cubic-bezier(0.33, 1, 0.68, 1);
+      will-change: transform; // GPU acceleration for hover zoom
+    }
+
+    &__category {
+      position: absolute;
+      top: 0.75rem;
+      left: 0.75rem;
+      background: v.$color-bg-light;
+      padding: 0.4rem 0.8rem;
+      border-radius: 50px;
+      font-size: clamp(0.65rem, 1vw, 0.75rem);
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: v.$color-text-light;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1); // Avoid backdrop-filter here to reduce mobile paint lag
+    }
+
+    &__content {
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+      flex: 1; // Takes up remaining vertical space to push CTA down
+    }
+
+    &__title {
+      font-family: v.$font-primary;
+      font-size: clamp(1.2rem, 2vw, 1.8rem);
+      line-height: 1.1;
+      font-weight: 600;
+      letter-spacing: -0.02em;
+    }
+
+    &__desc {
+      font-size: clamp(1rem, 1vw, 0.95rem);
+      color: v.$color-gray-800;
+      line-height: 1.5;
+    }
+
+    &__explore {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-weight: 600;
+      font-size: clamp(0.8rem, 1vw, 0.9rem);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      
+      margin-top: auto; // CRITICAL: Anchors link to absolute bottom of card
+      padding-top: 0.5rem;
+      transition: color 0.3s ease;
+
+      svg {
+        width: 18px;
+        height: 18px;
+        transition: transform 0.3s ease, stroke 0.3s ease;
+      }
+    }
+  }
+
+  // --- FOOTER & CTA ---
+  &__footer {
+    display: flex;
+    justify-content: center;
+    margin-top: 1rem;
+    
+    @include m.respond-to(lg) {
+      margin-top: 3rem;
+    }
+  }
+
+  &__cta {
+    display: inline-block;
+    background: v.$color-text-light;
+    color: v.$color-bg-light;
+    padding: 1.2rem 3rem;
+    border-radius: 50px;
+    font-size: 1rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    transition: all 0.3s cubic-bezier(0.76, 0, 0.24, 1);
+
+    @media (max-width: v.$bp-sm) {
+      padding: 1rem 2rem;
+      font-size: 0.85rem;
+      width: 100%;
+      text-align: center;
+    }
+
+    &:hover {
+      background: v.$color-accent;
+      transform: translateY(-4px);
+      box-shadow: 0 10px 20px rgba(v.$color-accent, 0.2);
+    }
+  }
+}

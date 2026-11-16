@@ -1,0 +1,152 @@
+@use '../../styles/variables' as v;
+@use '../../styles/mixins' as m;
+
+.achievers {
+  position: relative;
+  width: 100%;
+  padding: 5rem 0;
+  background-color: v.$color-bg-light;
+  color: v.$color-text-light;
+  overflow: hidden;
+
+  @include m.respond-to(md) {
+    padding: 8rem 0;
+  }
+
+  &__container {
+    @include m.container;
+    display: flex;
+    flex-direction: column;
+    gap: 3rem;
+
+    @include m.respond-to(md) {
+      gap: 4rem;
+    }
+  }
+
+  // --- HEADER ---
+  &__header {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    max-width: 650px;
+  }
+
+  &__title {
+    font-family: v.$font-secondary;
+    font-size: clamp(2.5rem, 6vw, 5rem);
+    line-height: 1;
+    text-transform: uppercase;
+    font-weight: 500;
+
+    .accent {
+      color: v.$color-accent;
+      font-style: italic;
+    }
+  }
+
+  &__desc {
+    font-size: clamp(0.9rem, 1.5vw, 1.1rem);
+    color: v.$color-gray-800;
+    line-height: 1.6;
+  }
+
+  // --- GRID (1 Col Mobile -> 3 Col Desktop) ---
+  &__grid {
+    display: grid;
+    grid-template-columns: 1fr; // Vertical stack on mobile
+    gap: 1.5rem;
+
+    @include m.respond-to(md) {
+      grid-template-columns: repeat(2, 1fr); // 2 Cols on tablet
+      gap: 2rem;
+    }
+
+    @include m.respond-to(lg) {
+      grid-template-columns: repeat(3, 1fr); // 3 Cols on desktop
+    }
+  }
+
+  // --- CARDS ---
+  .achiever-card {
+    display: flex;
+    flex-direction: column;
+    background: rgba(0, 0, 0, 0.03); // Very subtle premium background
+    border: 1px solid rgba(0, 0, 0, 0.05);
+    padding: 2rem;
+    border-radius: 16px;
+    height: 100%; // Matches height dynamically
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    
+    // Slight float effect on hover
+    &:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 15px 30px rgba(0, 0, 0, 0.05);
+    }
+
+    // Modern Quote Icon
+    &__quote-icon {
+      width: 32px;
+      height: 32px;
+      color: v.$color-accent;
+      opacity: 0.8;
+      margin-bottom: 1.5rem;
+    }
+
+    // Exact 3-line enforced text
+    &__text {
+      font-size: clamp(0.9rem, 1.2vw, 1.05rem);
+      line-height: 1.6;
+      color: v.$color-text-light;
+      font-weight: 500;
+      margin-bottom: 2rem;
+      
+      // CSS trick to strictly limit to 3 lines
+      display: -webkit-box;
+      -webkit-line-clamp: 3;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+      
+      flex: 1; // Pushes the profile block to the bottom
+    }
+
+    // Bottom Profile Area
+    &__profile {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      border-top: 1px solid rgba(0, 0, 0, 0.08);
+      padding-top: 1.5rem;
+      margin-top: auto;
+    }
+
+    &__image {
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      object-fit: cover;
+      flex-shrink: 0;
+    }
+
+    &__meta {
+      display: flex;
+      flex-direction: column;
+      gap: 0.2rem;
+    }
+
+    &__name {
+      font-family: v.$font-primary;
+      font-size: 1rem;
+      font-weight: 700;
+      letter-spacing: -0.01em;
+    }
+
+    &__rank {
+      font-size: 0.75rem;
+      font-weight: 600;
+      color: v.$color-gray-800;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+  }
+}

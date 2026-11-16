@@ -1,0 +1,202 @@
+@use '../../styles/variables' as v;
+@use '../../styles/mixins' as m;
+
+.centers {
+  position: relative;
+  width: 100%;
+  padding: 5rem 0;
+  background-color: v.$color-bg-dark; 
+  color: v.$color-text-dark;
+  overflow: hidden;
+
+  @include m.respond-to(md) {
+    padding: 8rem 0;
+  }
+
+  &__container {
+    @include m.container;
+    display: flex;
+    flex-direction: column;
+    gap: 3rem;
+
+    @include m.respond-to(md) {
+      gap: 4rem;
+    }
+  }
+
+  // --- HEADER ---
+  &__header {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    max-width: 650px;
+  }
+
+  &__title {
+    font-family: v.$font-secondary;
+    font-size: clamp(2.5rem, 6vw, 5rem);
+    line-height: 1;
+    text-transform: uppercase;
+    font-weight: 500;
+
+    .accent {
+      color: v.$color-accent;
+      font-style: italic;
+    }
+  }
+
+  &__desc {
+    font-size: clamp(0.9rem, 1.5vw, 1.1rem);
+    color: rgba(255, 255, 255, 0.7);
+    line-height: 1.6;
+  }
+
+  // --- GRID (1 Col Mobile -> 2 Col Tablet -> 4 Col Desktop) ---
+  &__grid {
+    display: grid;
+    grid-template-columns: 1fr; // Vertical stack on mobile
+    gap: 1.5rem;
+    
+    @include m.respond-to(md) {
+      grid-template-columns: repeat(2, 1fr); // 2x2 grid on tablet
+      gap: 2rem;
+    }
+
+    @include m.respond-to(lg) {
+      grid-template-columns: repeat(4, 1fr); // Full row on desktop
+      gap: 1.5rem;
+    }
+  }
+
+  // --- CARDS ---
+  .center-card {
+    position: relative;
+    width: 100%;
+    // On mobile, use a wider landscape box so it doesn't take up too much vertical height
+    aspect-ratio: 4/3; 
+    border-radius: 16px;
+    overflow: hidden;
+    cursor: pointer;
+    
+    // Hardware acceleration
+    will-change: transform;
+    transform: translateZ(0);
+
+    @include m.respond-to(md) {
+      aspect-ratio: 1/1; // Square on tablet
+    }
+
+    @include m.respond-to(lg) {
+      aspect-ratio: 3/4; // Tall vertical layout on desktop
+    }
+
+    // Interactive states
+    &:hover {
+      .center-card__bg img {
+        transform: scale(1.08);
+      }
+      .center-card__overlay {
+        background: linear-gradient(to top, rgba(0,0,0,0.95) 0%, rgba(0,0,0,0.1) 100%);
+      }
+      .center-card__arrow {
+        transform: translateX(10px);
+        background: v.$color-accent;
+        border-color: v.$color-accent;
+      }
+    }
+
+    // Background Image
+    &__bg {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 1;
+
+      img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        transition: transform 0.8s cubic-bezier(0.33, 1, 0.68, 1);
+        will-change: transform;
+      }
+    }
+
+    // Overlay Gradient
+    &__overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to top, rgba(0,0,0,0.85) 0%, rgba(0,0,0,0.3) 50%, rgba(0,0,0,0.1) 100%);
+      transition: background 0.5s ease;
+      z-index: 2;
+    }
+
+    // Text Content
+    &__content {
+      position: absolute;
+      inset: 0;
+      z-index: 3;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      padding: 1.5rem;
+      
+      @include m.respond-to(lg) {
+        padding: 2rem;
+      }
+    }
+
+    &__meta {
+      display: flex;
+      flex-direction: column;
+      gap: 0.25rem;
+    }
+
+    &__state {
+      font-size: 0.7rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: v.$color-accent;
+    }
+
+    &__city {
+      font-family: v.$font-secondary;
+      font-size: clamp(1.8rem, 3vw, 2.5rem);
+      font-weight: 500;
+      line-height: 1.1;
+      color: v.$color-bg-light;
+    }
+
+    &__footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+      gap: 1rem; // Ensures text doesn't overlap arrow on very small screens
+    }
+
+    &__type {
+      font-size: clamp(0.8rem, 1vw, 0.95rem);
+      color: rgba(255, 255, 255, 0.85);
+      line-height: 1.4;
+    }
+
+    &__arrow {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      border: 1px solid rgba(255,255,255,0.3);
+      color: v.$color-bg-light;
+      flex-shrink: 0; // Protects arrow circle from getting squished
+      transition: all 0.4s cubic-bezier(0.76, 0, 0.24, 1);
+      
+      svg {
+        width: 18px;
+        height: 18px;
+      }
+    }
+  }
+}

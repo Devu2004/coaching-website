@@ -1,0 +1,206 @@
+@use '../../styles/variables' as v;
+@use '../../styles/mixins' as m;
+
+.hero {
+  position: relative;
+  width: 100%;
+  // svh (small viewport height) guarantees perfect full screen on mobile, ignoring the URL bar
+  min-height: 100vh;
+  min-height: 100svh;
+  padding-top: 80px; // Clearance for navbar
+  padding-bottom: 2rem;
+  background-color: v.$color-bg-light;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+
+  &__container {
+    @include m.container;
+    position: relative;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+  }
+
+  // --- FLOATING ELEMENT ---
+  &__floating-img {
+    display: none; 
+    
+    @include m.respond-to(md) {
+      display: block;
+      position: absolute;
+      top: 7vh; // Slight offset from top
+      right: 11rem;
+      width: clamp(120px, 14vw, 220px);
+      aspect-ratio: 16/9;
+      border-radius: 200px;
+      overflow: hidden;
+      z-index: 1;
+    }
+
+    img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+  }
+
+  // --- KINETIC TYPOGRAPHY ---
+  &__main {
+    z-index: 2;
+    flex: 1; // Takes up all available vertical space
+    display: flex;
+    flex-direction: column;
+    justify-content: center; // Vertically centers the text beautifully
+    padding: 2rem 0;
+  }
+
+  &__title {
+    font-family: v.$font-secondary;
+    // Scales fluidly. On 200px screens it will drop to 2.2rem to fit safely.
+    font-size: clamp(2.2rem, 9.5vw, 9rem);
+    font-weight: 500;
+    line-height: 0.95;
+    text-transform: uppercase;
+    display: flex;
+    flex-direction: column;
+    
+    @media (max-width: v.$bp-sm) {
+      gap: 0.25rem; // Tighter vertical stacking on mobile
+    }
+  }
+
+  &__line {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap; // CRITICAL for 200px viewports
+    gap: 0.15em;
+
+    &--center {
+      @include m.respond-to(md) {
+        margin-left: 8vw;
+      }
+    }
+
+    &--end {
+      @include m.respond-to(md) {
+        justify-content: flex-end;
+      }
+    }
+  }
+
+  &__word {
+    overflow: hidden; 
+    display: inline-flex;
+
+    &.accent {
+      font-style: italic;
+      color: v.$color-accent;
+    }
+  }
+
+  &__word-inner {
+    display: inline-block;
+    will-change: transform;
+    transform-origin: left bottom;
+    padding-bottom: 0.05em; 
+  }
+
+  // --- INLINE IMAGE ---
+  &__inline-media {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 0.72em; 
+    width: 2.2em; 
+    border-radius: 2em; 
+    overflow: hidden;
+    background-color: v.$color-gray-100;
+    margin: 0 0.1em;
+    transform: translateY(-0.06em); // Optical baseline alignment
+    
+    // Extra compression for absolute extreme 200px widths
+    @media (max-width: 250px) {
+      width: 1.5em;
+    }
+
+    img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center;
+      will-change: transform; 
+    }
+  }
+
+  // --- BOTTOM EDITORIAL BAR ---
+  &__bottom {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid rgba(0,0,0,0.1);
+    z-index: 2;
+
+    @include m.respond-to(md) {
+      flex-direction: row;
+      justify-content: space-between;
+      align-items: flex-end;
+      padding-bottom: 0.5rem;
+    }
+  }
+
+  &__desc {
+    max-width: 450px;
+    
+    p {
+      font-size: clamp(0.9rem, 1.2vw, 1.1rem);
+      line-height: 1.5;
+      color: v.$color-gray-800;
+      font-weight: 500;
+    }
+  }
+
+  &__actions {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    flex-wrap: wrap; // Stack safely on tiny screens
+  }
+
+  &__stats {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+
+    .stat-number {
+      font-family: v.$font-secondary;
+      font-size: clamp(1.5rem, 3vw, 2rem);
+      font-weight: 600;
+      line-height: 1;
+    }
+    .stat-label {
+      font-size: 0.7rem;
+      text-transform: uppercase;
+      font-weight: 700;
+      line-height: 1.2;
+      color: v.$color-gray-800;
+    }
+  }
+
+  &__cta {
+    background: v.$color-text-light;
+    color: v.$color-bg-light;
+    border: none;
+    padding: 1rem 2rem;
+    border-radius: 50px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.76, 0, 0.24, 1);
+
+    &:hover {
+      background: v.$color-accent;
+      transform: translateY(-2px);
+    }
+  }
+}
